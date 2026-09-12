@@ -1,0 +1,21 @@
+{
+  "name": "blood-network",
+  "version": "1.0.0",
+  "description": "BloodBridge - Sukkur Emergency Donor Network (CSC-206 Software Engineering project)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  }
+}

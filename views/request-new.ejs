@@ -1,0 +1,54 @@
+<% var title = 'Post a Request' %>
+<% var activeNav = 'new-request' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Post a Blood Request</h1>
+    <p class="subtitle">This will be visible to compatible donors right away.</p>
+  </div>
+</div>
+
+<div class="card" style="max-width: 520px;">
+  <% if (error) { %>
+    <div class="error-box"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/requests/new">
+    <div>
+      <label for="patient_name">Patient name</label>
+      <input type="text" id="patient_name" name="patient_name" value="<%= formData.patient_name || '' %>" required>
+    </div>
+    <div class="form-row">
+      <div>
+        <label for="blood_type_needed">Blood type needed</label>
+        <select id="blood_type_needed" name="blood_type_needed" required>
+          <option value="">Select</option>
+          <% bloodTypes.forEach(function(bt) { %>
+            <option value="<%= bt %>" <%= formData.blood_type_needed === bt ? 'selected' : '' %>><%= bt %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div>
+        <label for="urgency">Urgency</label>
+        <select id="urgency" name="urgency" required>
+          <option value="">Select</option>
+          <option value="Critical" <%= formData.urgency === 'Critical' ? 'selected' : '' %>>Critical — needed within hours</option>
+          <option value="High" <%= formData.urgency === 'High' ? 'selected' : '' %>>High — needed today</option>
+          <option value="Medium" <%= formData.urgency === 'Medium' ? 'selected' : '' %>>Medium — needed within days</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label for="hospital_location">Hospital / location</label>
+      <input type="text" id="hospital_location" name="hospital_location" value="<%= formData.hospital_location || '' %>" placeholder="e.g. Ghulam Muhammad Mahar Medical College Hospital, Sukkur" required>
+    </div>
+    <div>
+      <label for="contact_phone">Contact phone number</label>
+      <input type="tel" id="contact_phone" name="contact_phone" value="<%= formData.contact_phone || '' %>" placeholder="03xx-xxxxxxx" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Post Request</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

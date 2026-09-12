@@ -1,0 +1,84 @@
+<% var title = 'Dashboard' %>
+<% var activeNav = 'dashboard' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="subtitle">A quick look at the network right now.</p>
+  </div>
+  <a href="/requests/new" class="btn btn-primary">+ Post a Request</a>
+</div>
+
+<div class="stat-grid">
+  <div class="stat">
+    <span class="stat-value"><%= stats.criticalRequests %></span>
+    <span class="stat-label">Critical requests pending</span>
+  </div>
+  <div class="stat stat--teal">
+    <span class="stat-value"><%= stats.availableDonors %></span>
+    <span class="stat-label">Donors available now</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value"><%= stats.pendingRequests %></span>
+    <span class="stat-label">Total pending requests</span>
+  </div>
+  <div class="stat stat--teal">
+    <span class="stat-value"><%= stats.totalDonors %></span>
+    <span class="stat-label">Registered donors</span>
+  </div>
+</div>
+
+<div class="card mt-24">
+  <h2>Your Donor Profile</h2>
+  <% if (donorProfile) { %>
+    <p>
+      Blood type: <span class="badge badge-bloodtype"><%= donorProfile.blood_type %></span>
+      &nbsp;&nbsp;
+      Status:
+      <% if (donorProfile.availability) { %>
+        <span class="badge badge-available">Available</span>
+      <% } else { %>
+        <span class="badge badge-unavailable">Not available</span>
+      <% } %>
+      &nbsp;&nbsp;
+      <% if (isEligible) { %>
+        <span class="badge badge-eligible">Eligible to donate</span>
+      <% } else { %>
+        <span class="badge badge-not-eligible">In cooldown period</span>
+      <% } %>
+    </p>
+    <div class="item-actions">
+      <form method="POST" action="/donor/toggle-availability">
+        <button type="submit" class="btn btn-sm <%= donorProfile.availability ? 'btn-secondary' : 'btn-teal' %>">
+          Mark as <%= donorProfile.availability ? 'Not Available' : 'Available' %>
+        </button>
+      </form>
+      <a href="/donor/register" class="btn btn-sm btn-secondary">Edit Profile</a>
+    </div>
+  <% } else { %>
+    <p class="text-muted">You haven't registered as a donor yet. If you're eligible and willing, register — it takes a minute and could save a life.</p>
+    <a href="/donor/register" class="btn btn-teal">Register as a Donor</a>
+  <% } %>
+</div>
+
+<div class="card mt-24">
+  <h2>Your Recent Requests</h2>
+  <% if (myRequests.length === 0) { %>
+    <p class="text-muted">You haven't posted any blood requests.</p>
+  <% } else { %>
+    <div class="list">
+      <% myRequests.forEach(function(r) { %>
+        <div class="item item--<%= r.urgency.toLowerCase() %>">
+          <div class="item-main">
+            <div class="item-title"><%= r.patient_name %> needs <%= r.blood_type_needed %></div>
+            <div class="item-meta"><%= r.hospital_location %> · Posted <%= new Date(r.created_at).toLocaleDateString() %></div>
+          </div>
+          <span class="badge badge-<%= r.status.toLowerCase() %>"><%= r.status %></span>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

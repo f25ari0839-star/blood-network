@@ -1,0 +1,64 @@
+<% var title = 'Find Donors' %>
+<% var activeNav = 'donors' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Find Donors</h1>
+    <p class="subtitle">Search the full donor directory by blood type and area.</p>
+  </div>
+</div>
+
+<div class="filter-bar card">
+  <form method="GET" action="/donors">
+    <div>
+      <label for="blood_type">Blood type</label>
+      <select id="blood_type" name="blood_type">
+        <option value="">All types</option>
+        <% bloodTypes.forEach(function(bt) { %>
+          <option value="<%= bt %>" <%= filters.blood_type === bt ? 'selected' : '' %>><%= bt %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div>
+      <label for="city_area">City / area</label>
+      <input type="text" id="city_area" name="city_area" placeholder="e.g. Sukkur" value="<%= filters.city_area || '' %>">
+    </div>
+    <button type="submit" class="btn btn-secondary">Filter</button>
+    <% if (filters.blood_type || filters.city_area) { %>
+      <a href="/donors" class="btn btn-secondary">Clear</a>
+    <% } %>
+  </form>
+</div>
+
+<% if (donors.length === 0) { %>
+  <div class="empty-state">No donors match these filters yet.</div>
+<% } else { %>
+  <div class="list">
+    <% donors.forEach(function(d) { %>
+      <div class="item">
+        <div class="item-main">
+          <div class="item-title">
+            <span class="badge badge-bloodtype"><%= d.blood_type %></span>
+            &nbsp; <%= d.name %>
+          </div>
+          <div class="item-meta"><%= d.city_area %> · <%= d.phone %></div>
+        </div>
+        <div class="item-actions">
+          <% if (d.availability) { %>
+            <span class="badge badge-available">Available</span>
+          <% } else { %>
+            <span class="badge badge-unavailable">Not available</span>
+          <% } %>
+          <% if (d.eligible) { %>
+            <span class="badge badge-eligible">Eligible</span>
+          <% } else { %>
+            <span class="badge badge-not-eligible">Cooldown (<%= d.daysRemaining %>d left)</span>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

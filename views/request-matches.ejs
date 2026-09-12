@@ -1,0 +1,43 @@
+<% var title = 'Matching Donors' %>
+<% var activeNav = 'requests' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Matches for <%= request.patient_name %></h1>
+    <p class="subtitle">
+      Needs <strong><%= request.blood_type_needed %></strong> blood at <%= request.hospital_location %>
+      &nbsp;·&nbsp; <span class="badge badge-<%= request.urgency.toLowerCase() %>"><%= request.urgency %></span>
+    </p>
+  </div>
+  <a href="/requests" class="btn btn-secondary">&larr; Back to Requests</a>
+</div>
+
+<p class="text-muted">
+  Showing donors whose blood type is compatible with <%= request.blood_type_needed %>, who are marked available,
+  and who are past their 3-month donation cooldown. Donors in <%= request.hospital_location %> are shown first.
+</p>
+
+<% if (matches.length === 0) { %>
+  <div class="empty-state">No eligible, available, compatible donors right now. Check back soon, or widen the search in "Find Donors".</div>
+<% } else { %>
+  <div class="list">
+    <% matches.forEach(function(d) { %>
+      <div class="item">
+        <div class="item-main">
+          <div class="item-title">
+            <span class="badge badge-bloodtype"><%= d.blood_type %></span>
+            &nbsp; <%= d.name %>
+            <% if (d.sameArea) { %> <span class="badge badge-available">Same area</span><% } %>
+          </div>
+          <div class="item-meta"><%= d.city_area %> · <%= d.phone %></div>
+        </div>
+        <div class="item-actions">
+          <a href="tel:<%= d.phone %>" class="btn btn-sm btn-teal">Call Donor</a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

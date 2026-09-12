@@ -1,0 +1,75 @@
+<% var title = 'Requests' %>
+<% var activeNav = 'requests' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Blood Requests</h1>
+    <p class="subtitle">Sorted by urgency, then most recent.</p>
+  </div>
+  <a href="/requests/new" class="btn btn-primary">+ Post a Request</a>
+</div>
+
+<div class="filter-bar card">
+  <form method="GET" action="/requests">
+    <div>
+      <label for="blood_type">Blood type needed</label>
+      <select id="blood_type" name="blood_type">
+        <option value="">All types</option>
+        <% bloodTypes.forEach(function(bt) { %>
+          <option value="<%= bt %>" <%= filters.blood_type === bt ? 'selected' : '' %>><%= bt %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div>
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="">All statuses</option>
+        <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+        <option value="Fulfilled" <%= filters.status === 'Fulfilled' ? 'selected' : '' %>>Fulfilled</option>
+        <option value="Expired" <%= filters.status === 'Expired' ? 'selected' : '' %>>Expired</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-secondary">Filter</button>
+    <% if (filters.blood_type || filters.status) { %>
+      <a href="/requests" class="btn btn-secondary">Clear</a>
+    <% } %>
+  </form>
+</div>
+
+<% if (requests.length === 0) { %>
+  <div class="empty-state">No requests match these filters.</div>
+<% } else { %>
+  <div class="list">
+    <% requests.forEach(function(r) { %>
+      <div class="item item--<%= r.urgency.toLowerCase() %>">
+        <div class="item-main">
+          <div class="item-title">
+            <span class="badge badge-bloodtype"><%= r.blood_type_needed %></span>
+            &nbsp; <%= r.patient_name %> · <%= r.hospital_location %>
+          </div>
+          <div class="item-meta">
+            Posted by <%= r.requester_name %> · <%= new Date(r.created_at).toLocaleDateString() %>
+            <% if (r.status === 'Pending') { %>
+              · <strong><%= r.matchingCount %></strong> matching donor<%= r.matchingCount === 1 ? '' : 's' %> available now
+            <% } %>
+          </div>
+        </div>
+        <div class="item-actions">
+          <span class="badge badge-<%= r.urgency.toLowerCase() %>"><%= r.urgency %></span>
+          <span class="badge badge-<%= r.status.toLowerCase() %>"><%= r.status %></span>
+          <% if (r.status === 'Pending') { %>
+            <a href="/requests/<%= r.id %>/matches" class="btn btn-sm btn-secondary">View Matches</a>
+          <% } %>
+          <% if (r.isOwner && r.status === 'Pending') { %>
+            <form method="POST" action="/requests/<%= r.id %>/fulfill">
+              <button type="submit" class="btn btn-sm btn-teal">Mark Fulfilled</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,37 @@
+<% var title = 'Donor Profile' %>
+<% var activeNav = 'donor-register' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1><%= existing ? 'Edit Your Donor Profile' : 'Register as a Donor' %></h1>
+    <p class="subtitle">This is how requesters will find and contact you.</p>
+  </div>
+</div>
+
+<div class="card" style="max-width: 480px;">
+  <% if (error) { %>
+    <div class="error-box"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/donor/register">
+    <div>
+      <label for="blood_type">Blood type</label>
+      <select id="blood_type" name="blood_type" required>
+        <option value="">Select your blood type</option>
+        <% bloodTypes.forEach(function(bt) { %>
+          <option value="<%= bt %>" <%= existing && existing.blood_type === bt ? 'selected' : '' %>><%= bt %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div>
+      <label for="last_donation_date">Last donation date (if any)</label>
+      <input type="date" id="last_donation_date" name="last_donation_date"
+             value="<%= existing && existing.last_donation_date ? existing.last_donation_date.substring(0,10) : '' %>">
+      <p class="field-hint">Leave blank if you've never donated. A 3-month (90 day) cooldown applies after each donation.</p>
+    </div>
+    <button type="submit" class="btn btn-primary"><%= existing ? 'Save Changes' : 'Register' %></button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,50 @@
+<% var title = 'Sign Up' %>
+<%- include('partials/header') %>
+
+<div class="auth-card">
+  <h1>Create Account</h1>
+  <p class="text-muted" style="text-align:center; margin-top:-8px;">Join the network as a donor, requester, or both.</p>
+
+  <% if (error) { %>
+    <div class="error-box"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/signup">
+    <div>
+      <label for="name">Full name</label>
+      <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="<%= formData.email || '' %>" required>
+    </div>
+    <div class="form-row">
+      <div>
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" name="phone" value="<%= formData.phone || '' %>" placeholder="03xx-xxxxxxx" required>
+      </div>
+      <div>
+        <label for="city_area">City / area</label>
+        <input type="text" id="city_area" name="city_area" value="<%= formData.city_area || '' %>" placeholder="e.g. Sukkur, New Pind" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="6">
+      </div>
+      <div>
+        <label for="confirm_password">Confirm password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
+      </div>
+    </div>
+    <p class="field-hint">Password must be at least 6 characters.</p>
+    <button type="submit" class="btn btn-primary">Create Account</button>
+  </form>
+
+  <div class="auth-switch">
+    Already have an account? <a href="/login">Log in</a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
