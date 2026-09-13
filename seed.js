@@ -26,6 +26,18 @@ async function seed() {
     ['Hina Abbasi', 'hina@example.com', '0305-6667788', 'New Pind, Sukkur'],
     ['Fahad Junejo', 'fahad@example.com', '0306-7778899', 'Rohri'],
     ['Zara Solangi', 'zara@example.com', '0307-8889900', 'Sukkur City'],
+    // Extra donors across more Sukkur areas, covering every blood type so any
+    // search or match query returns results without needing to reseed.
+    ['Imran Qureshi', 'imran@example.com', '0308-1010101', 'Pannu Aqil'],
+    ['Nadia Baloch', 'nadia@example.com', '0309-2020202', 'Old Sukkur'],
+    ['Waqas Chandio', 'waqas@example.com', '0310-3030303', 'Military Road, Sukkur'],
+    ['Farah Bhutto', 'farah@example.com', '0311-4040404', 'Shikarpur Road, Sukkur'],
+    ['Kashif Lakho', 'kashif@example.com', '0312-5050505', 'Rohri'],
+    ['Rabia Panhwar', 'rabia@example.com', '0313-6060606', 'New Pind, Sukkur'],
+    ['Adeel Mahar', 'adeel@example.com', '0314-7070707', 'Sukkur City'],
+    ['Sadia Larik', 'sadia@example.com', '0315-8080808', 'Pannu Aqil'],
+    ['Tariq Indhar', 'tariq@example.com', '0316-9090909', 'Old Sukkur'],
+    ['Mehwish Katiar', 'mehwish@example.com', '0317-1212121', 'Military Road, Sukkur'],
   ];
 
   const userIds = {};
@@ -51,6 +63,19 @@ async function seed() {
   insertDonor.run(userIds['ayesha@example.com'], 'AB+', 0, daysAgo(200)); // eligible but unavailable
   insertDonor.run(userIds['usman@example.com'], 'O+', 1, daysAgo(95));   // eligible
   insertDonor.run(userIds['hina@example.com'], 'A-', 1, daysAgo(45));    // still in cooldown
+
+  // Extra donors — every blood type covered, all available and past cooldown,
+  // spread across different Sukkur areas so matching/search always has results.
+  insertDonor.run(userIds['imran@example.com'], 'O-', 1, null);
+  insertDonor.run(userIds['nadia@example.com'], 'O+', 1, null);
+  insertDonor.run(userIds['waqas@example.com'], 'A+', 1, null);
+  insertDonor.run(userIds['farah@example.com'], 'A-', 1, null);
+  insertDonor.run(userIds['kashif@example.com'], 'B+', 1, null);
+  insertDonor.run(userIds['rabia@example.com'], 'B-', 1, null);
+  insertDonor.run(userIds['adeel@example.com'], 'AB+', 1, null);
+  insertDonor.run(userIds['sadia@example.com'], 'AB-', 1, null);
+  insertDonor.run(userIds['tariq@example.com'], 'O+', 1, null);
+  insertDonor.run(userIds['mehwish@example.com'], 'B+', 1, null);
 
   const insertRequest = db.prepare(`
     INSERT INTO requests (requester_id, patient_name, blood_type_needed, urgency, hospital_location, contact_phone, status)
