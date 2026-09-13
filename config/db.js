@@ -1,16 +1,18 @@
 // config/db.js
 // Sets up the SQLite database connection and creates tables if they don't exist yet.
-// Using better-sqlite3 because it's synchronous and simple — no callback/promise juggling
-// needed for a project this size, and it persists to a real file on disk (not in-memory).
+// Uses Node's built-in `node:sqlite` module (available without flags since Node 22.13 / 23.4,
+// and a Release Candidate as of Node 24) instead of a third-party native package. This avoids
+// requiring a C++ build toolchain (Visual Studio Build Tools on Windows, Xcode on Mac) just to
+// install dependencies — a common source of setup pain for a class project.
 
-const Database = require('better-sqlite3');
+const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 
 const dbPath = path.join(__dirname, '..', 'data', 'blood_network.db');
-const db = new Database(dbPath);
+const db = new DatabaseSync(dbPath);
 
 // Enforce foreign key constraints (SQLite has them off by default)
-db.pragma('foreign_keys = ON');
+db.exec('PRAGMA foreign_keys = ON;');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
