@@ -1,43 +1,39 @@
 # AI Usage Disclosure
 
 **Project:** BloodBridge — Sukkur Emergency Donor Network
-**Team members:** _[fill in names]_
-**Date:** _[fill in]_
-
-> Fill this in honestly before submission — see Section 7 of the project brief.
-> This is not penalized; it exists so AI use can be discussed fairly during evaluation.
+**Team members:** Muhammad Zain, Maliha Nabi, Sahabia Hassan, Tooba Zulfaqar, Ali Shakeel, Ayan
+**Date:** 29 October 2026
 
 ## AI tools used
 
-- Claude (Anthropic) — used for initial scaffolding, code generation, and this document's structure.
+- Claude (Anthropic), used throughout the project for code generation, debugging help, and documentation.
 
 ## What AI was used for
 
-- Generating the initial project skeleton: Express server setup, route structure, and
-  folder organization.
-- Writing the blood-type compatibility logic (`utils/bloodCompatibility.js`) and the
-  90-day cooldown calculation.
-- Generating boilerplate for the EJS views and the CSS design system.
-- Writing the authentication flow (signup/login/session handling with bcrypt).
-- Drafting this README and disclosure template.
+- Generating the initial project structure: Express server, folder organization, and route files.
+- Designing the SQLite database schema (users, donor profiles, requests, donor responses).
+- Writing the blood-type compatibility logic and the 90-day donation cooldown calculation.
+- Generating the EJS view templates and the CSS styling.
+- Writing the authentication flow, including password hashing with bcrypt.
+- Fixing a Windows installation problem by switching the database layer to Node's built-in SQLite module.
+- Adding features after instructor feedback: units of blood needed per request, and the "I Can Donate" offer system with a "View Offers" page for requesters.
+- Fixing dependency security warnings (npm audit) and preparing the app for cloud deployment.
+- Drafting the README, this disclosure, and our demo video script.
 
 ## What the team did itself
 
-_[Fill this in — be specific. Examples of what to describe:]_
-- Which parts you read line-by-line and understood before demo day
-- Any bugs you found and fixed yourselves
-- Any features you modified, extended, or rewrote from the AI-generated version
-- Decisions you made that AI didn't make for you (e.g. choosing SQLite over another
-  database, deciding on the urgency levels, deciding what "same area" matching means)
-- Testing you did manually (which flows you clicked through, what data you used)
+- Installed and ran the project on our own machines and resolved the local Node.js and npm setup.
+- Manually tested every core feature end to end: signup/login, donor registration, availability toggle, posting requests, matching, offering to donate, marking requests fulfilled, and donor search.
+- Reviewed the main code (routes, database setup, and the compatibility logic) so we can explain how the system works.
+- Checked the blood-type compatibility results against a standard transfusion chart.
+- Demoed the project to our instructor, collected feedback, and requested the changes listed above.
+- Uploaded the code to GitHub and prepared the demo, sample data, and presentation.
 
 ## Team understanding confirmation
 
-Every team member should be able to explain, without notes:
-- How the blood type compatibility check works and why O- / AB+ are special cases
-- How passwords are protected (hashing, not encryption — and why that distinction matters)
-- How the auto-expiry of pending requests works
-- Why the database is SQLite and what would need to change to use a different one
-
-_[Each member should add a line here confirming which parts of the codebase they can
-personally walk through and defend during Q&A.]_
+Each team member can explain, without notes, the part they present in the demo, including:
+- How the blood type compatibility check works and why O- and AB+ are special cases.
+- How passwords are protected (hashing, not encryption).
+- How pending requests automatically expire after 7 days.
+- How "I Can Donate" is validated: the donor must be registered, available, blood-type compatible, and past the 90-day cooldown.
+- Why SQLite was chosen and what would change to use a different database.
