@@ -65,6 +65,24 @@ app.use((req, res) => {
   res.status(404).render('404');
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🩸 Blood Donor & Emergency Request Network running at http://localhost:${PORT}\n`);
+// On free cloud hosting the filesystem is wiped on every restart, so the database starts empty.
+// With AUTO_SEED=true we load the sample data whenever there are no users yet.
+// (Never enabled locally unless you set it, so your own data is never touched.)
+async function startServer() {
+  if (process.env.AUTO_SEED === 'true') {
+    const userCount = db.prepare('SELECT COUNT(*) AS c FROM users').get().c;
+    if (userCount === 0) {
+      console.log('Empty database detected, loading sample data...');
+      await require('./seed').seed();
+    }
+  }
+
+  app.listen(PORT, () => {
+    console.log(`\n🩸 Blood Donor & Emergency Request Network running on port ${PORT}\n`);
+  });
+}
+
+startServer().catch(err => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });
