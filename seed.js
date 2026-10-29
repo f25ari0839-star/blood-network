@@ -8,8 +8,8 @@ const db = require('./config/db');
 
 async function seed() {
   console.log('Clearing existing data...');
-  db.exec('DELETE FROM requests; DELETE FROM donor_profiles; DELETE FROM users;');
-  db.exec("DELETE FROM sqlite_sequence WHERE name IN ('requests','donor_profiles','users');");
+  db.exec('DELETE FROM donor_responses; DELETE FROM requests; DELETE FROM donor_profiles; DELETE FROM users;');
+  db.exec("DELETE FROM sqlite_sequence WHERE name IN ('donor_responses','requests','donor_profiles','users');");
 
   const passwordHash = await bcrypt.hash('password123', 10);
 
@@ -78,19 +78,24 @@ async function seed() {
   insertDonor.run(userIds['mehwish@example.com'], 'B+', 1, null);
 
   const insertRequest = db.prepare(`
-    INSERT INTO requests (requester_id, patient_name, blood_type_needed, urgency, hospital_location, contact_phone, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO requests (requester_id, patient_name, blood_type_needed, units_needed, urgency, hospital_location, contact_phone, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  insertRequest.run(userIds['fahad@example.com'], 'Mumtaz Junejo', 'O-', 'Critical', 'Sukkur City', '0306-7778899', 'Pending');
-  insertRequest.run(userIds['zara@example.com'], 'Rukhsana Bibi', 'B+', 'High', 'Rohri', '0307-8889900', 'Pending');
-  insertRequest.run(userIds['ayesha@example.com'], 'Kamran Khan', 'A+', 'Medium', 'New Pind, Sukkur', '0303-4445566', 'Pending');
+  insertRequest.run(userIds['fahad@example.com'], 'Mumtaz Junejo', 'O-', 3, 'Critical', 'Sukkur City', '0306-7778899', 'Pending');
+  insertRequest.run(userIds['zara@example.com'], 'Rukhsana Bibi', 'B+', 2, 'High', 'Rohri', '0307-8889900', 'Pending');
+  insertRequest.run(userIds['ayesha@example.com'], 'Kamran Khan', 'A+', 1, 'Medium', 'New Pind, Sukkur', '0303-4445566', 'Pending');
 
   console.log('✅ Seed complete.');
   console.log('   Sample login: ahmed@example.com / password123 (any seeded user works, same password)');
 }
 
-seed().catch(err => {
-  console.error('Seed failed:', err);
-  process.exit(1);
-});
+module.exports = { seed };
+
+// Run directly with `node seed.js`; when imported by server.js this block is skipped.
+if (require.main === module) {
+  seed().catch(err => {
+    console.error('Seed failed:', err);
+    process.exit(1);
+  });
+}
