@@ -71,7 +71,7 @@
       <% myRequests.forEach(function(r) { %>
         <div class="item item--<%= r.urgency.toLowerCase() %>">
           <div class="item-main">
-            <div class="item-title"><%= r.patient_name %> needs <%= r.blood_type_needed %></div>
+            <div class="item-title"><%= r.patient_name %> needs <%= r.blood_type_needed %> (<%= r.units_needed %> unit<%= r.units_needed === 1 ? '' : 's' %>)</div>
             <div class="item-meta"><%= r.hospital_location %> · Posted <%= new Date(r.created_at).toLocaleDateString() %></div>
           </div>
           <span class="badge badge-<%= r.status.toLowerCase() %>"><%= r.status %></span>

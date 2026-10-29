@@ -1,0 +1,48 @@
+<% var title = 'Donor Offers' %>
+<% var activeNav = 'requests' %>
+<%- include('partials/header') %>
+
+<div class="page-header">
+  <div>
+    <h1>Offers for <%= request.patient_name %></h1>
+    <p class="subtitle">
+      Needs <strong><%= request.blood_type_needed %></strong> · <strong><%= request.units_needed %></strong> unit<%= request.units_needed === 1 ? '' : 's' %>
+      at <%= request.hospital_location %>
+      &nbsp;·&nbsp; <span class="badge badge-<%= request.urgency.toLowerCase() %>"><%= request.urgency %></span>
+    </p>
+  </div>
+  <a href="/requests" class="btn btn-secondary">&larr; Back to Requests</a>
+</div>
+
+<p class="text-muted">
+  These donors have personally offered to donate. They are available, compatible, and past their 3-month cooldown.
+  Contact them directly, and mark the request Fulfilled once the donation is done.
+  <% if (responders.length < request.units_needed) { %>
+    You still need at least <strong><%= request.units_needed - responders.length %></strong> more offer<%= (request.units_needed - responders.length) === 1 ? '' : 's' %> to cover all <%= request.units_needed %> unit<%= request.units_needed === 1 ? '' : 's' %>.
+  <% } else { %>
+    You have enough offers to cover all <%= request.units_needed %> unit<%= request.units_needed === 1 ? '' : 's' %>.
+  <% } %>
+</p>
+
+<% if (responders.length === 0) { %>
+  <div class="empty-state">No donors have offered yet. You can also check "View Matches" to contact compatible donors directly.</div>
+<% } else { %>
+  <div class="list">
+    <% responders.forEach(function(d) { %>
+      <div class="item">
+        <div class="item-main">
+          <div class="item-title">
+            <span class="badge badge-bloodtype"><%= d.blood_type %></span>
+            &nbsp; <%= d.name %>
+          </div>
+          <div class="item-meta"><%= d.city_area %> · <%= d.phone %> · Offered <%= new Date(d.responded_at).toLocaleString() %></div>
+        </div>
+        <div class="item-actions">
+          <a href="tel:<%= d.phone %>" class="btn btn-sm btn-teal">Call Donor</a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

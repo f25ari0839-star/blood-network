@@ -50,8 +50,10 @@
           </div>
           <div class="item-meta">
             Posted by <%= r.requester_name %> · <%= new Date(r.created_at).toLocaleDateString() %>
+            · <strong><%= r.units_needed %></strong> unit<%= r.units_needed === 1 ? '' : 's' %> needed
             <% if (r.status === 'Pending') { %>
               · <strong><%= r.matchingCount %></strong> matching donor<%= r.matchingCount === 1 ? '' : 's' %> available now
+              · <strong><%= r.responseCount %></strong> offer<%= r.responseCount === 1 ? '' : 's' %> received
             <% } %>
           </div>
         </div>
@@ -60,6 +62,16 @@
           <span class="badge badge-<%= r.status.toLowerCase() %>"><%= r.status %></span>
           <% if (r.status === 'Pending') { %>
             <a href="/requests/<%= r.id %>/matches" class="btn btn-sm btn-secondary">View Matches</a>
+          <% } %>
+          <% if (r.canRespond) { %>
+            <form method="POST" action="/requests/<%= r.id %>/respond">
+              <button type="submit" class="btn btn-sm btn-primary">I Can Donate</button>
+            </form>
+          <% } else if (r.alreadyResponded && r.status === 'Pending') { %>
+            <span class="badge badge-available">You offered to donate</span>
+          <% } %>
+          <% if (r.isOwner) { %>
+            <a href="/requests/<%= r.id %>/responses" class="btn btn-sm btn-secondary">View Offers (<%= r.responseCount %>)</a>
           <% } %>
           <% if (r.isOwner && r.status === 'Pending') { %>
             <form method="POST" action="/requests/<%= r.id %>/fulfill">

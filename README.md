@@ -58,6 +58,11 @@ tables are recreated automatically on boot.
   their own request as fulfilled, and stale pending requests (7+ days old) auto-expiring
 
 **Extras included beyond the minimum:**
+- Requests specify how many units (bags) of blood are needed (1 to 20)
+- Donors can actively respond to a request with "I Can Donate". The server checks they are
+  registered, available, blood-type compatible, and past the 90-day cooldown before accepting
+- Requesters get a "View Offers" page listing donors who offered, with contact numbers, and
+  a note on whether offers cover all the units needed
 - Matches are sorted so donors in the same area as the hospital appear first
 - Only donors who are simultaneously available, blood-type compatible, AND past their
   cooldown are shown as matches (not just compatible)
@@ -82,7 +87,7 @@ blood-network/
 ├── routes/
 │   ├── auth.js                 # signup, login, logout
 │   ├── donors.js                # donor registration, availability toggle, directory
-│   └── requests.js              # post request, list/filter, matching, fulfill
+│   └── requests.js              # post request, list/filter, matching, donor offers, fulfill
 ├── utils/bloodCompatibility.js # compatibility chart + cooldown math
 ├── views/                      # EJS templates
 ├── public/css/style.css        # all styling

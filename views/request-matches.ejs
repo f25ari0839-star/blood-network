@@ -6,7 +6,7 @@
   <div>
     <h1>Matches for <%= request.patient_name %></h1>
     <p class="subtitle">
-      Needs <strong><%= request.blood_type_needed %></strong> blood at <%= request.hospital_location %>
+      Needs <strong><%= request.blood_type_needed %></strong> blood (<strong><%= request.units_needed %></strong> unit<%= request.units_needed === 1 ? '' : 's' %>) at <%= request.hospital_location %>
       &nbsp;·&nbsp; <span class="badge badge-<%= request.urgency.toLowerCase() %>"><%= request.urgency %></span>
     </p>
   </div>
